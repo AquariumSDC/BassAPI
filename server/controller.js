@@ -1,16 +1,22 @@
 const model = require('./model');
 
 module.exports = {
-  getStyles: (req, res) => {
-    res.send('getProductStyles');
+  getStyles: async (req, res) => {
+    const styles = await model.getStyles(req.params.product_id);
+    res.status(200).send(styles);
   },
-  getRelated: (req, res) => {
-    res.send('getRelatedProducts');
+  getRelated: async (req, res) => {
+    const related = await model.getRelated(req.params.product_id);
+    res.status(200).send(related);
   },
-  getOne: (req, res) => {
-    res.send('getOneProducts');
+  getOne: async (req, res) => {
+    const product = await model.getOne(req.params.product_id);
+    res.status(200).send(product);
   },
-  getAll: (req, res) => {
-    res.send('getAllProducts');
+  getAll: async (req, res) => {
+    const page = req.query.page || 1;
+    const count = req.query.count || 5;
+    const allProducts = await model.getAll(page, count);
+    res.status(200).send(allProducts);
   },
 };
