@@ -26,31 +26,30 @@ const connect = async () => {
   await pool.query('CREATE TABLE IF NOT EXISTS features (feature_id INTEGER NULL DEFAULT NULL, feature VARCHAR(20) NULL DEFAULT NULL, value VARCHAR(20) NULL DEFAULT NULL, PRIMARY KEY (feature_id))');
 
   // styles table
-  await pool.query('CREATE TABLE IF NOT EXISTS styles (style_id INTEGER NULL DEFAULT NULL, product_id INTEGER NULL DEFAULT NULL, name VARCHAR(20) NULL DEFAULT NULL, sale_price DECIMAL((10, 2)) NULL DEFAULT NULL, default? BIT NULL DEFAULT NULL, PRIMARY KEY (style_id))');
+  await pool.query('CREATE TABLE IF NOT EXISTS styles (style_id INTEGER NULL DEFAULT NULL, product_id INTEGER NULL DEFAULT NULL, name VARCHAR(50) NULL DEFAULT NULL, sale_price INTEGER NULL DEFAULT NULL, default_price INTEGER NULL DEFAULT NULL, default_style INTEGER NULL DEFAULT NULL, PRIMARY KEY (style_id))');
 
-  await pool.query('CREATE TABLE IF NOT EXISTS skus (sku_id INTEGER NULL DEFAULT NULL, style_id INTEGER NULL DEFAULT NULL, size VARCHAR(5) NULL DEFAULT NULL, quantity INTEGER NULL DEFAULT NULL)');
+  await pool.query('CREATE TABLE IF NOT EXISTS skus (sku_id INTEGER NULL DEFAULT NULL, style_id INTEGER NULL DEFAULT NULL, size VARCHAR(15) NULL DEFAULT NULL, quantity INTEGER NULL DEFAULT NULL)');
 
-  await pool.query('CREATE TABLE IF NOT EXISTS photos (photo_id INTEGER NULL DEFAULT NULL, style_id INTEGER NULL DEFAULT NULL, url VARCHAR(110) NULL DEFAULT NULL, thumbnail_url VARCHAR(110) NULL DEFAULT NULL)');
+  await pool.query('CREATE TABLE IF NOT EXISTS photos (photo_id INTEGER NULL DEFAULT NULL, style_id INTEGER NULL DEFAULT NULL, url VARCHAR NULL DEFAULT NULL, thumbnail_url VARCHAR NULL DEFAULT NULL)');
 
   await pool.query('CREATE TABLE IF NOT EXISTS related (related_id INTEGER NULL DEFAULT NULL, current_product_id INTEGER NULL DEFAULT NULL, related_product_id INTEGER NULL DEFAULT NULL)');
 
   // COPY existing data into table
-  await pool.query("COPY product FROM '/Library/product.csv' DELIMITER ',' CSV");
+  await pool.query("COPY product FROM '/Library/product.csv' DELIMITER ',' CSV HEADER");
 
   // COPY existing data into table
-  await pool.query("COPY styles FROM '/Library/styles.csv' DELIMITER ',' CSV");
+  await pool.query("COPY styles FROM '/Library/styles.csv' DELIMITER ',' NULL AS 'null' CSV HEADER");
 
   // COPY existing data into table
-  await pool.query("COPY skus FROM '/Library/skus.csv' DELIMITER ',' CSV");
+  await pool.query("COPY skus FROM '/Library/skus.csv' DELIMITER ',' CSV HEADER");
 
   // COPY existing data into table
-  await pool.query("COPY photos FROM '/Library/photos.csv' DELIMITER ',' CSV");
+  await pool.query("COPY photos FROM '/Library/photos.csv' DELIMITER ',' CSV HEADER");
 
   // COPY existing data into table
-  await pool.query("COPY related FROM '/Library/related.csv' DELIMITER ',' CSV");
+  await pool.query("COPY related FROM '/Library/related.csv' DELIMITER ',' CSV HEADER");
 
-  const rows = await pool.query('SELECT * FROM product');
-  console.log(rows.rows);
+  //const rows = await pool.query('SELECT * FROM product');
 };
 
 connect();
