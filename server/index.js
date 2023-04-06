@@ -4,8 +4,9 @@ const morgan = require('morgan');
 const router = require('./routes');
 
 const db = require('./db');
+
 db.connect();
-db.build();
+// db.build();
 
 const app = express();
 

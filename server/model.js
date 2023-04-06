@@ -12,8 +12,12 @@ module.exports = {
     return related.rows;
   },
   getOne: async (productId) => {
-    const queryString = `SELECT * FROM product WHERE product_id=${productId}`;
-    const product = await db.pool.query(queryString);
+    const productQueryString = `SELECT * FROM product WHERE id=${productId}`;
+    const featuresQueryString = `SELECT (feature, value) FROM features WHERE product_id=${productId}`;
+
+    const product = await db.pool.query(productQueryString);
+    const features = await db.pool.query(featuresQueryString);
+    console.log(features.rows[0].row)
     return product.rows;
   },
   getAll: async (page, count) => {
