@@ -9,7 +9,20 @@ module.exports = {
     //   res.status(404).send(error);
     // }
     const styles = await model.getStyles(req.params.product_id);
-    res.status(200).send(styles);
+    let photos = [];
+    let skus = {};
+    for (let i = 0; i < styles.length; i += 1) {
+      skus = {};
+      photos = await model.getPhotos(styles[i].style_id);
+      styles[i].photos = photos;
+      const allSkus = await model.getSkus(styles[i].style_id);
+      allSkus.map((sku) => {
+        skus[sku.sku_id] = {size: sku.size, quantity: sku.quantity}
+      });
+      styles[i].skus = skus;
+    }
+    const returnObj = { product_id: req.params.product_id, results: styles };
+    res.status(200).send(returnObj);
   },
   getRelated: async (req, res) => {
     try {
