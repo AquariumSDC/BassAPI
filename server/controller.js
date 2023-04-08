@@ -4,6 +4,8 @@ const db = require('./db');
 module.exports = {
   getStyles: async (req, res) => {
     const client = await db.pool.connect();
+    // console.log(db.pool.totalCount);
+    // console.log(db.pool.idleCount);
     try {
       const styles = await model.getStyles(req.params.product_id, client);
       let photos = [];
@@ -21,8 +23,8 @@ module.exports = {
       }
 
       if (styles.length === 0) {
-        res.setHeader('content-type', 'application/json');
-        res.status(404).send('Product out of range');
+        res.setHeader('content-type', 'text/plain');
+        res.status(404).send('There are no styles for this product');
       } else {
         const returnObj = { product_id: req.params.product_id, results: styles };
 
@@ -59,6 +61,7 @@ module.exports = {
       const allProducts = await model.getAll(page, count);
       res.status(200).send(allProducts);
     } catch (error) {
+      console.log(error);
       res.status(404).send(error);
     }
   },

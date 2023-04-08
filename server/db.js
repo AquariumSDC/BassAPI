@@ -8,13 +8,14 @@ const pool = new Pool({
   port: process.env.DBPORT,
 });
 
+// console.log(pool.totalCount);
+// console.log(pool.idleCount);
+
 const connectDB = async () => {
   await pool.connect();
 };
 
-const closeDB = async () => {
-  await pool.close();
-};
+const closeDB = () => pool.end().then(() => console.log('pool has ended'));
 
 const buildDB = async () => {
   // Comment these in production?
