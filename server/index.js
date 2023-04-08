@@ -5,7 +5,7 @@ const router = require('./routes');
 
 const db = require('./db');
 
-db.connect();
+// db.connect();
 // db.build();
 
 const app = express();
