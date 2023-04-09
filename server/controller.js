@@ -22,15 +22,15 @@ module.exports = {
         styles[i].skus = skus[i];
       }
 
-      if (styles.length === 0) {
-        res.setHeader('content-type', 'text/plain');
-        res.status(404).send('There are no styles for this product');
-      } else {
-        const returnObj = { product_id: req.params.product_id, results: styles };
+      // if (styles.length === 0) {
+      //   res.setHeader('content-type', 'text/plain');
+      //   res.status(404).send('There are no styles for this product');
+      // } else {
+      const returnObj = { product_id: req.params.product_id, results: styles };
 
-        res.setHeader('content-type', 'application/json');
-        res.status(200).send(returnObj);
-      }
+      res.setHeader('content-type', 'application/json');
+      res.status(200).send(returnObj);
+      // }
     } catch (error) {
       res.status(404).send(error);
     }

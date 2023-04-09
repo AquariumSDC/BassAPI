@@ -49,6 +49,8 @@ const buildDB = async () => {
   await pool.query('CREATE INDEX photo_index ON photos(style_id)');
   await pool.query('CREATE INDEX sku_index ON skus(style_id)');
   await pool.query('CREATE INDEX product_index ON product(id)');
+  await pool.query('CREATE INDEX features_index ON features(product_id)');
+  await pool.query('CREATE INDEX related_index ON related(product_id)');
 
   // COPY existing data into table
   await pool.query("COPY product FROM '/Library/product.csv' DELIMITER ',' CSV HEADER");
