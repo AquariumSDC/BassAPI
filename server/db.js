@@ -50,25 +50,25 @@ const buildDB = async () => {
   await pool.query('CREATE INDEX sku_index ON skus(style_id)');
   await pool.query('CREATE INDEX product_index ON product(id)');
   await pool.query('CREATE INDEX features_index ON features(product_id)');
-  await pool.query('CREATE INDEX related_index ON related(product_id)');
+  await pool.query('CREATE INDEX related_index ON related(current_product_id)');
 
   // COPY existing data into table
-  await pool.query("COPY product FROM '/Library/product.csv' DELIMITER ',' CSV HEADER");
+  await pool.query(`COPY product FROM '${process.env.PRODUCTPATH}' DELIMITER ',' NULL AS 'null' CSV HEADER`);
 
   // COPY existing data into table
-  await pool.query("COPY styles FROM '/Library/styles.csv' DELIMITER ',' NULL AS 'null' CSV HEADER");
+  await pool.query(`COPY styles FROM '${process.env.STYLESPATH}' DELIMITER ',' NULL AS 'null' CSV HEADER`);
 
   // COPY existing data into table
-  await pool.query("COPY skus FROM '/Library/skus.csv' DELIMITER ',' CSV HEADER");
+  await pool.query(`COPY skus FROM '${process.env.SKUSPATH}' DELIMITER ',' NULL AS 'null' CSV HEADER`);
 
   // COPY existing data into table
-  await pool.query("COPY photos FROM '/Library/photos.csv' DELIMITER ',' CSV HEADER");
+  await pool.query(`COPY photos FROM '${process.env.PHOTOSPATH}' DELIMITER ',' NULL AS 'null' CSV HEADER`);
 
   // COPY existing data into table
-  await pool.query("COPY related FROM '/Library/related.csv' DELIMITER ',' CSV HEADER");
+  await pool.query(`COPY related FROM '${process.env.RELATEDPATH}' DELIMITER ',' NULL AS 'null' CSV HEADER`);
 
   // COPY existing data into table
-  await pool.query("COPY features FROM '/Library/features.csv' DELIMITER ','  NULL AS 'null' CSV HEADER");
+  await pool.query(`COPY features FROM '${process.env.FEATURESPATH}' DELIMITER ',' NULL AS 'null' CSV HEADER`);
 
   // const rows = await pool.query('SELECT * FROM photos');
   // console.log(rows.rows);
