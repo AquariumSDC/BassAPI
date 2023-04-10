@@ -45,12 +45,12 @@ const buildDB = async () => {
   await pool.query('CREATE TABLE IF NOT EXISTS related (related_id INTEGER NULL DEFAULT NULL, current_product_id INTEGER NULL DEFAULT NULL, related_product_id INTEGER NULL DEFAULT NULL, PRIMARY KEY (related_id))');
 
   // Create Indexes
-  await pool.query('CREATE INDEX style_index ON styles(product_id)');
-  await pool.query('CREATE INDEX photo_index ON photos(style_id)');
-  await pool.query('CREATE INDEX sku_index ON skus(style_id)');
-  await pool.query('CREATE INDEX product_index ON product(id)');
-  await pool.query('CREATE INDEX features_index ON features(product_id)');
-  await pool.query('CREATE INDEX related_index ON related(current_product_id)');
+  await pool.query('CREATE INDEX style_index ON styles USING hash(product_id)');
+  await pool.query('CREATE INDEX photo_index ON photos USING hash(style_id)');
+  await pool.query('CREATE INDEX sku_index ON skus USING hash(style_id)');
+  await pool.query('CREATE INDEX product_index ON product USING hash(id)');
+  await pool.query('CREATE INDEX features_index ON features USING hash(product_id)');
+  await pool.query('CREATE INDEX related_index ON related USING hash(current_product_id)');
 
   // COPY existing data into table
   await pool.query(`COPY product FROM '${process.env.PRODUCTPATH}' DELIMITER ',' NULL AS 'null' CSV HEADER`);
