@@ -1,7 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
-const router = require('./routes');
+const productRouter = require('./Routes/productRoutes');
+const cartRouter = require('./Routes/cartRoutes');
 
 const db = require('./db');
 
@@ -14,7 +15,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
-app.use('/api/products', router);
+app.use('/api/products', productRouter);
+app.use('/api/cart', cartRouter);
 
 app.get('/', (request, response) => {
   response.json({ info: 'CoralAPI for product information' });

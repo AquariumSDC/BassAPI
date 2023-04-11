@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const products = require('./controller');
+const products = require('../Controllers/productController');
 
 router.get('/:product_id/styles', products.getStylesJSON);
 router.get('/:product_id/related', products.getRelated);

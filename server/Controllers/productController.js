@@ -1,5 +1,5 @@
-const model = require('./model');
-const db = require('./db');
+const model = require('../Models/productModel');
+const db = require('../db');
 
 module.exports = {
   getStylesJSON: async (req, res) => {
