@@ -1,15 +1,16 @@
-const model = require('./model');
+const model = require('../Models/productModel');
+const db = require('../db');
 
 module.exports = {
-  getStyles: async (req, res) => {
-    // try {
-    //   const styles = await model.getStyles(req.params.product_id);
-    //   res.status(200).send(styles);
-    // } catch (error) {
-    //   res.status(404).send(error);
-    // }
-    const styles = await model.getStyles(req.params.product_id);
-    res.status(200).send(styles);
+  getStylesJSON: async (req, res) => {
+    const client = await db.pool.connect();
+    try {
+      const styles = await model.getStylesJSON(req.params.product_id, client);
+      res.status(200).send(styles);
+    } catch (error) {
+      res.status(404).send(error);
+    }
+    client.release();
   },
   getRelated: async (req, res) => {
     try {
@@ -19,9 +20,9 @@ module.exports = {
       res.status(404).send(error);
     }
   },
-  getOne: async (req, res) => {
+  getOneJSON: async (req, res) => {
     try {
-      const product = await model.getOne(req.params.product_id);
+      const product = await model.getOneJSON(req.params.product_id);
       res.status(200).send(product);
     } catch (error) {
       res.status(404).send(error);
