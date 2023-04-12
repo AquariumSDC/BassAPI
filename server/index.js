@@ -23,6 +23,9 @@ app.use('/api/cart', cartRouter);
 app.get('/', (request, response) => {
   response.json({ info: 'CoralAPI for product information' });
 });
+app.get('/loaderio-8275ffc7959a37e3b9fbecabaf6283a3', (req, res) => {
+  res.send('loaderio-8275ffc7959a37e3b9fbecabaf6283a3');
+});
 
 const PORT = process.env.PORT || 8080;
 
