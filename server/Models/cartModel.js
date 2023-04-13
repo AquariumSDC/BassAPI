@@ -10,7 +10,7 @@ module.exports = {
   },
   postCart: async (sessionId, productId) => {
     const client = await db.pool.connect();
-    const queryString = `INSERT INTO cart (id, user_session, product_id, active) VALUES (NULL, ${sessionId}, ${productId}, 1)`;
+    const queryString = `INSERT INTO cart (user_session, product_id, active) VALUES (${sessionId}, ${productId}, 1)`;
     const items = await client.query(queryString);
     client.release();
     return items.rows;
