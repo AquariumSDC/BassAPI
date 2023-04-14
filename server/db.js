@@ -9,10 +9,6 @@ const pool = new Pool({
   port: process.env.DBPORT,
 });
 
-// console.log(pool)
-// console.log(pool.totalCount);
-// console.log(pool.idleCount);
-
 const connectDB = async () => {
   await pool.connect();
 };

@@ -26,26 +26,24 @@ module.exports = {
   //   return skus.rows;
   // },
   getRelated: async (productId) => {
-    const client = await db.pool.connect();
     const queryString = `SELECT jsonb_agg((related_product_id)) FROM related WHERE current_product_id=${productId}`;
     try {
+      const client = await db.pool.connect();
       const related = await client.query(queryString);
       client.release();
       return related.rows[0].jsonb_agg;
     } catch (err) {
-      client.release();
       return err;
     }
   },
   getOneJSON: async (productId) => {
-    const client = await db.pool.connect();
     const queryString = `SELECT jsonb_build_object('id', id, 'name', name, 'slogan', slogan, 'description', description, 'category', category, 'default_price', default_price, 'features', (SELECT jsonb_agg(jsonb_build_object('feature', feature, 'value', value)) FROM features WHERE product_id=${productId})) FROM product WHERE id=${productId}`;
     try {
+      const client = await db.pool.connect();
       const product = await client.query(queryString);
       client.release();
       return product.rows[0].jsonb_build_object;
     } catch (err) {
-      client.release();
       return err;
     }
   },
@@ -64,14 +62,13 @@ module.exports = {
   //   return features.rows;
   // },
   getAll: async (page, count) => {
-    const client = await db.pool.connect();
     const queryString = `SELECT * FROM product LIMIT ${count} OFFSET ${(page - 1) * count}`;
     try {
+      const client = await db.pool.connect();
       const styles = await client.query(queryString);
       client.release();
       return styles.rows;
     } catch (err) {
-      client.release();
       return err;
     }
   },
