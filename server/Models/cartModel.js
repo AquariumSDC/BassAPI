@@ -4,15 +4,25 @@ module.exports = {
   getCart: async (sessionId) => {
     const client = await db.pool.connect();
     const queryString = `SELECT * FROM cart WHERE user_session=${sessionId}`;
-    const items = await client.query(queryString);
-    client.release();
-    return items.rows;
+    try {
+      const items = await client.query(queryString);
+      client.release();
+      return items.rows;
+    } catch (err) {
+      client.release();
+      return err;
+    }
   },
   postCart: async (sessionId, productId) => {
     const client = await db.pool.connect();
     const queryString = `INSERT INTO cart (user_session, product_id, active) VALUES (${sessionId}, ${productId}, 1)`;
-    const items = await client.query(queryString);
-    client.release();
-    return items.rows;
+    try {
+      const items = await client.query(queryString);
+      client.release();
+      return items.rows;
+    } catch (err) {
+      client.release();
+      return err;
+    }
   },
 };
