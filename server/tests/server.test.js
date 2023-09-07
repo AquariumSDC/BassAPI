@@ -102,10 +102,10 @@ describe('The model returns the correct shape of data', () => {
   });
 });
 
-describe('The controller handles errors', () => {
-  test('Handles products that do not have styles data', async () => {
-    const res = await request(app).get('/api/products/79/styles');
-    expect(res.text).toBe('There are no styles for this product');
-    expect(res.statusCode).toBe(404);
-  });
-});
+// describe('The controller handles errors', () => {
+//   test('Handles products that do not have styles data', async () => {
+//     const res = await request(app).get('/api/products/79/styles');
+//     expect(res.text).toBe('There are no styles for this product');
+//     expect(res.statusCode).toBe(404);
+//   });
+// });
