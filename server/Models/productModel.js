@@ -4,43 +4,54 @@ module.exports = {
   getStylesJSON: async (productId, client) => {
     const query = {
       text: `
-      SELECT jsonb_build_object(
-        'product_id', s.product_id,
-        'results', jsonb_agg(
-          jsonb_build_object(
-            'style_id', s.style_id,
-            'name', s.name,
-            'original_price', s.default_price,
-            'sale_price', s.sale_price,
-            'default?', s.default_style,
-            'photos', (
-              SELECT jsonb_agg(
-                jsonb_build_object(
-                  'thumbnail_url', p.thumbnail_url,
-                  'url', p.url
-                )
-              )
-              FROM photos p
-              WHERE p.style_id = s.style_id
-            ),
-            'skus', (
-              SELECT jsonb_object_agg(
-                sku_id,
-                jsonb_build_object(
-                  'quantity', sku.quantity,
-                  'size', sku.size
-                )
-              )
-              FROM skus sku
-              WHERE sku.style_id = s.style_id
+    WITH OrderedStyles AS (
+      SELECT
+        s.style_id,
+        s.name,
+        s.default_price,
+        s.sale_price,
+        s.default_style,
+        (
+          SELECT jsonb_agg(
+            jsonb_build_object(
+              'thumbnail_url', p.thumbnail_url,
+              'url', p.url
             )
           )
-        )
-      ) AS result
+          FROM photos p
+          WHERE p.style_id = s.style_id
+        ) AS photos,
+        (
+          SELECT jsonb_object_agg(
+            sku_id,
+            jsonb_build_object(
+              'quantity', sku.quantity,
+              'size', sku.size
+            )
+          )
+          FROM skus sku
+          WHERE sku.style_id = s.style_id
+        ) AS skus
       FROM styles s
       WHERE s.product_id = $1
-      GROUP BY s.product_id;
-    `,
+      ORDER BY s.style_id ASC
+    )
+    SELECT jsonb_build_object(
+      'product_id', $1,
+      'results', jsonb_agg(
+        jsonb_build_object(
+          'style_id', style_id,
+          'name', name,
+          'original_price', default_price,
+          'sale_price', sale_price,
+          'default?', default_style,
+          'photos', photos,
+          'skus', skus
+        )
+      )
+    ) AS result
+    FROM OrderedStyles;
+  `,
       values: [productId],
     };
 
