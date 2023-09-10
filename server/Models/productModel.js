@@ -25,7 +25,7 @@ module.exports = {
           ),
           'skus', (
             SELECT jsonb_object_agg(
-              sku_id,
+              sku_id::text,
               jsonb_build_object(
                 'quantity', sku.quantity,
                 'size', sku.size
@@ -38,14 +38,14 @@ module.exports = {
       ) AS results
     FROM styles s
     WHERE s.product_id = $1
-    GROUP BY s.product_id, s.style_id
+    GROUP BY s.style_id, s.product_id
     ORDER BY s.style_id ASC;
   `,
       values: [productId],
     };
     try {
       const styles = await client.query(query);
-      return { product_id: productId, results: styles.rows[0] };
+      return styles.rows;
     } catch (err) {
       return err;
     }
